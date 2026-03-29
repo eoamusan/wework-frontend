@@ -170,7 +170,7 @@ export function JobListingsSection() {
                 </span>
               </div>
 
-              <p className="mt-5 text-sm leading-8 text-secondary/80">
+              <p className="mt-5 text-sm leading-6 text-secondary/80">
                 {job.summary}
               </p>
 

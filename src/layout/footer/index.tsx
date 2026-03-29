@@ -54,8 +54,8 @@ const socialLinks = [
 export function Footer() {
   return (
     <footer className="flex justify-center bg-footer-bg text-white">
-      <div className="mx-auto flex w-full max-w-[86rem] flex-col gap-12 px-2 py-12 text-center sm:px-2.5 md:px-3">
-        <div className="grid gap-12 lg:grid-cols-[1.35fr_2fr] lg:items-start">
+      <div className="mx-auto flex w-full max-w-[86rem] flex-col gap-20 px-2 py-12 text-center sm:px-2.5 md:px-3">
+        <div className="grid gap-12 lg:grid-cols-[1.35fr_2fr] lg:items-start justify-between">
           <div className=" flex max-w-[32rem] flex-col space-y-5">
             <Link
               aria-label="WeWerk home"
@@ -118,7 +118,9 @@ export function Footer() {
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:items-start lg:justify-items-center">
             {footerColumns.map((column) => (
               <div className="space-y-4" key={column.title}>
-                <h3 className="font-bold text-white text-left">{column.title}</h3>
+                <h3 className="font-bold text-white text-left">
+                  {column.title}
+                </h3>
                 <div className="flex flex-col gap-3">
                   {column.links.map((linkLabel) => (
                     <Link
@@ -135,15 +137,15 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="flex items-center justify-center gap-1 text-[11px] text-white/45">
+        <div className="flex items-center justify-center gap-1 text-xs text-white">
+          <span>Copyright</span>
           <Image
             alt=""
             aria-hidden="true"
             className="h-3 w-3"
             src={copyrightIcon}
           />
-          <span>Copyright</span>
-          <span>Ondea All Right Reserved</span>
+          <span>Oneda All Right Reserved</span>
         </div>
       </div>
     </footer>

@@ -26,6 +26,13 @@ const avatars = [
   },
 ] as const;
 
+const floatingGlowTransition = {
+  duration: 9,
+  ease: "easeInOut",
+  repeat: Infinity,
+  repeatType: "mirror",
+} as const;
+
 export function HeroSection() {
   const shouldReduceMotion = useReducedMotion();
 
@@ -64,6 +71,37 @@ export function HeroSection() {
           src={homeImage}
         />
       </motion.div>
+      <motion.div
+        animate={
+          shouldReduceMotion
+            ? undefined
+            : {
+                opacity: [0.45, 0.72, 0.5],
+                scale: [1, 1.08, 1],
+                x: [0, 18, -10],
+                y: [0, -18, 10],
+              }
+        }
+        className="absolute top-[-7rem] left-[-5rem] h-56 w-56 rounded-full bg-[#8d66ff]/35 blur-3xl"
+        transition={floatingGlowTransition}
+      />
+      <motion.div
+        animate={
+          shouldReduceMotion
+            ? undefined
+            : {
+                opacity: [0.28, 0.46, 0.34],
+                scale: [1, 1.12, 1],
+                x: [0, -22, 12],
+                y: [0, 22, -12],
+              }
+        }
+        className="absolute right-[-3rem] bottom-8 h-52 w-52 rounded-full bg-[#00d1c7]/20 blur-3xl"
+        transition={{
+          ...floatingGlowTransition,
+          duration: 11,
+        }}
+      />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(51,0,201,0.86)_0%,rgba(51,0,201,0.64)_48%,rgba(0,26,26,0.9)_100%)]" />
       <div className="absolute inset-0 bg-black/10" />
 
@@ -73,14 +111,39 @@ export function HeroSection() {
         initial={contentVariant.initial}
       >
         <motion.div
+          animate={
+            shouldReduceMotion
+              ? undefined
+              : {
+                  y: [0, -5, 0],
+                }
+          }
           className="mb-7 inline-flex items-center gap-3 rounded-full bg-white px-4 py-1 shadow-[0_18px_40px_rgba(0,0,0,0.12)]"
+          transition={{
+            duration: 4.2,
+            ease: "easeInOut",
+            repeat: Infinity,
+          }}
           {...itemVariant}
         >
           <div className="flex -space-x-2">
             {avatars.map((avatar, index) => (
-              <span
+              <motion.span
+                animate={
+                  shouldReduceMotion
+                    ? undefined
+                    : {
+                        y: index % 2 === 0 ? [0, -3, 0] : [0, 3, 0],
+                      }
+                }
                 className="relative size-7 overflow-hidden rounded-full border-2 border-white"
                 key={avatar.alt}
+                transition={{
+                  delay: index * 0.12,
+                  duration: 3.4,
+                  ease: "easeInOut",
+                  repeat: Infinity,
+                }}
               >
                 <Image
                   alt={avatar.alt}
@@ -89,7 +152,7 @@ export function HeroSection() {
                   src={homeImage}
                   priority={index === 0}
                 />
-              </span>
+              </motion.span>
             ))}
           </div>
           <span className="text-base font-medium text-[#2e3340]">
@@ -113,6 +176,7 @@ export function HeroSection() {
         </motion.p>
 
         <motion.form
+          whileHover={shouldReduceMotion ? undefined : { y: -2 }}
           className="mt-9 flex w-full max-w-[27rem] flex-col gap-6 sm:max-w-[40rem] sm:flex-row sm:items-center"
           {...itemVariant}
         >

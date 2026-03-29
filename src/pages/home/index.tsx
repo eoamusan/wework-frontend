@@ -1,3 +1,4 @@
+import { FaqSection } from "@wew/pages/home/faqSection";
 import { HeroSection } from "@wew/pages/home/heroSection";
 import { JobListingsSection } from "@wew/pages/home/jobListingsSection";
 import { TestimonialsSection } from "@wew/pages/home/testimonialsSection";
@@ -9,6 +10,7 @@ export default function HomePage() {
         <HeroSection />
         <JobListingsSection />
         <TestimonialsSection />
+        <FaqSection />
       </div>
     </main>
   );

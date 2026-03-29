@@ -125,38 +125,47 @@ export function TestimonialsSection() {
           >
             {marqueeTestimonials.map((testimonial, index) => (
               <motion.article
-                className="group relative h-[23rem] w-[21rem] shrink-0 overflow-hidden rounded-[1.35rem] bg-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.18)] sm:w-[23rem]"
+                className="group relative h-[25rem] w-[21rem] shrink-0 overflow-hidden rounded-[1.35rem] bg-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.18)] sm:w-[23rem]"
                 initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
                 key={`${testimonial.id}-${index}`}
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true, amount: 0.25 }}
                 whileHover={shouldReduceMotion ? undefined : { y: -6 }}
-                whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+                whileInView={
+                  shouldReduceMotion ? undefined : { opacity: 1, y: 0 }
+                }
               >
                 <Image
                   alt={testimonial.name}
-                  className={`absolute inset-0 h-full w-full object-cover object-[center_10%] transition duration-500 group-hover:scale-[1.03] ${testimonial.objectPosition}`}
+                  className={`absolute inset-0 h-full w-full object-cover object-[center_5%] transition duration-500 group-hover:scale-[1.03] ${testimonial.objectPosition}`}
                   fill
                   sizes="(max-width: 640px) 21rem, (max-width: 1024px) 23rem, 23rem"
                   src={getHiredImage}
                 />
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0.28)_35%,rgba(0,0,0,0.7)_100%)]" />
+                <div className="absolute inset-0 bg-[#00000066]" />
 
                 <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-6">
                   <div>
-                    <h3 className="text-[1.1rem] font-semibold">{testimonial.name}</h3>
-                    <p className="mt-1 text-sm text-white/78">{testimonial.role}</p>
+                    <h3 className="text-xl font-bold">{testimonial.name}</h3>
+                    <p className="mt-1 text-sm text-white">
+                      {testimonial.role}
+                    </p>
+
+                    <div className="flex items-center gap-1">
+                      {stars.map((star) => (
+                        <span
+                          className="text-lg leading-none text-[#ffc93c]"
+                          key={star}
+                        >
+                          ★
+                        </span>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-1">
-                    {stars.map((star) => (
-                      <span className="text-lg leading-none text-[#ffc93c]" key={star}>
-                        ★
-                      </span>
-                    ))}
-                  </div>
-
-                  <p className="text-sm leading-8 text-white/82">{testimonial.quote}</p>
+                  <p className="text-sm leading-6 text-white">
+                    {testimonial.quote}
+                  </p>
                 </div>
               </motion.article>
             ))}
