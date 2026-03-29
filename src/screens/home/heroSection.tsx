@@ -33,28 +33,10 @@ const floatingGlowTransition = {
   repeatType: "mirror",
 } as const;
 
+const heroEase = [0.22, 1, 0.36, 1] as const;
+
 export function HeroSection() {
   const shouldReduceMotion = useReducedMotion();
-
-  const contentVariant = shouldReduceMotion
-    ? {}
-    : {
-        animate: {
-          transition: {
-            delayChildren: 0.12,
-            staggerChildren: 0.1,
-          },
-        },
-        initial: {},
-      };
-
-  const itemVariant = shouldReduceMotion
-    ? {}
-    : {
-        animate: { opacity: 1, y: 0 },
-        initial: { opacity: 0, y: 18 },
-        transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
-      };
 
   return (
     <section className="relative overflow-hidden bg-[#001a1a] text-white">
@@ -62,7 +44,7 @@ export function HeroSection() {
         animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1 }}
         className="absolute inset-0"
         initial={shouldReduceMotion ? false : { opacity: 0, scale: 1.05 }}
-        transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 1.1, ease: heroEase }}
       >
         <Image
           alt="Professionals ready for new job opportunities"
@@ -106,79 +88,104 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-black/10" />
 
       <motion.div
-        animate={contentVariant.animate}
+        animate={
+          shouldReduceMotion
+            ? undefined
+            : {
+                transition: {
+                  delayChildren: 0.12,
+                  staggerChildren: 0.1,
+                },
+              }
+        }
         className="relative z-10 mx-auto flex min-h-[36rem] max-w-4xl flex-col items-center justify-center px-5 py-16 text-center sm:px-8"
-        initial={contentVariant.initial}
+        initial={shouldReduceMotion ? false : {}}
       >
         <motion.div
-          animate={
-            shouldReduceMotion
-              ? undefined
-              : {
-                  y: [0, -5, 0],
-                }
-          }
-          className="mb-7 inline-flex items-center gap-3 rounded-full bg-white px-4 py-1 shadow-[0_18px_40px_rgba(0,0,0,0.12)]"
-          transition={{
-            duration: 4.2,
-            ease: "easeInOut",
-            repeat: Infinity,
-          }}
-          {...itemVariant}
+          className="mb-7"
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+          whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.45, ease: heroEase }}
         >
-          <div className="flex -space-x-2">
-            {avatars.map((avatar, index) => (
-              <motion.span
-                animate={
-                  shouldReduceMotion
-                    ? undefined
-                    : {
-                        y: index % 2 === 0 ? [0, -3, 0] : [0, 3, 0],
-                      }
-                }
-                className="relative size-7 overflow-hidden rounded-full border-2 border-white"
-                key={avatar.alt}
-                transition={{
-                  delay: index * 0.12,
-                  duration: 3.4,
-                  ease: "easeInOut",
-                  repeat: Infinity,
-                }}
-              >
-                <Image
-                  alt={avatar.alt}
-                  className={`h-full w-full object-cover ${avatar.position}`}
-                  sizes="28px"
-                  src={homeImage}
-                  priority={index === 0}
-                />
-              </motion.span>
-            ))}
-          </div>
-          <span className="text-base font-medium text-[#2e3340]">
-            Discover a Job Opening
-          </span>
+          <motion.div
+            animate={
+              shouldReduceMotion
+                ? undefined
+                : {
+                    y: [0, -5, 0],
+                  }
+            }
+            className="inline-flex items-center gap-3 rounded-full bg-white px-4 py-1 shadow-[0_18px_40px_rgba(0,0,0,0.12)]"
+            transition={{
+              duration: 4.2,
+              ease: "easeInOut",
+              repeat: Infinity,
+            }}
+          >
+            <div className="flex -space-x-2">
+              {avatars.map((avatar, index) => (
+                <motion.span
+                  animate={
+                    shouldReduceMotion
+                      ? undefined
+                      : {
+                          y: index % 2 === 0 ? [0, -3, 0] : [0, 3, 0],
+                        }
+                  }
+                  className="relative size-7 overflow-hidden rounded-full border-2 border-white"
+                  key={avatar.alt}
+                  transition={{
+                    delay: index * 0.12,
+                    duration: 3.4,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                  }}
+                >
+                  <Image
+                    alt={avatar.alt}
+                    className={`h-full w-full object-cover ${avatar.position}`}
+                    sizes="28px"
+                    src={homeImage}
+                    priority={index === 0}
+                  />
+                </motion.span>
+              ))}
+            </div>
+            <span className="text-base font-medium text-[#2e3340]">
+              Discover a Job Opening
+            </span>
+          </motion.div>
         </motion.div>
 
         <motion.h1
           className="max-w-3xl text-4xl font-semibold tracking-[-0.04em] sm:text-5xl"
-          {...itemVariant}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+          transition={{ duration: 0.45, ease: heroEase }}
+          viewport={{ once: true, amount: 0.4 }}
+          whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
         >
           Find Your Next Dream Job
         </motion.h1>
 
         <motion.p
           className="mt-5 max-w-xl text-sm leading-7 text-white/82 sm:text-base"
-          {...itemVariant}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+          transition={{ duration: 0.45, ease: heroEase }}
+          viewport={{ once: true, amount: 0.4 }}
+          whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
         >
           Explore thousands of job opportunities from leading companies and fast-
           growing start-ups across diverse industries.
         </motion.p>
 
         <motion.form
-          whileHover={shouldReduceMotion ? undefined : { y: -2 }}
           className="mt-9 flex w-full max-w-[27rem] flex-col gap-6 sm:max-w-[40rem] sm:flex-row sm:items-center"
-          {...itemVariant}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+          transition={{ duration: 0.45, ease: heroEase }}
+          viewport={{ once: true, amount: 0.4 }}
+          whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+          whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
         >
           <label className="relative block flex-1">
             <Image
