@@ -105,12 +105,12 @@ export function Header() {
             </Modal>
 
             <Button
+              asChild
               className="h-11 min-w-[112px] rounded-xl border-accent-blue/70 px-6 hover:bg-accent-purple/30"
               size={null}
-              type="button"
               variant="outline"
             >
-              Login
+              <Link href="/login">Login</Link>
             </Button>
           </div>
         </motion.div>
