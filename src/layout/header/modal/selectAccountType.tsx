@@ -1,6 +1,7 @@
 import { FC } from "react";
 
 import { X } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@wew/components/ui/button";
 import {
@@ -22,6 +23,9 @@ const SelectAccountTypeModalContent: FC<SelectAccountTypeProps> = ({
   accountType,
   setAccountType,
 }) => {
+  const continueHref =
+    accountType === "applicant" ? "/create-account" : "#";
+
   return (
     <ModalContent
       className="w-[min(94vw,720px)] gap-8 rounded-[2rem] border border-[#ece8f7] bg-white px-6 py-10 shadow-[0_28px_70px_rgba(6,2,18,0.18)] sm:px-14"
@@ -80,12 +84,12 @@ const SelectAccountTypeModalContent: FC<SelectAccountTypeProps> = ({
 
       <ModalClose asChild>
         <Button
+          asChild
           className="h-14 w-full rounded-[1.2rem] text-[1.05rem] shadow-[0_20px_40px_rgba(51,0,201,0.22)]"
           size={null}
-          type="button"
           variant="primary"
         >
-          Continue
+          <Link href={continueHref}>Continue</Link>
         </Button>
       </ModalClose>
     </ModalContent>

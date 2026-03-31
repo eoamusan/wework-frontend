@@ -1,5 +1,5 @@
-import CreateAccountPage from "@wew/screens/auth/createApplicantAccount";
+import CreateApplicantAccountPage from "@wew/screens/auth/createApplicantAccount";
 
 export default function Page() {
-  return <CreateAccountPage />;
+  return <CreateApplicantAccountPage />;
 }

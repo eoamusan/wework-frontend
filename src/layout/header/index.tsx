@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 
-import { motion, useReducedMotion } from "motion/react";
+import {
+  motion,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+} from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -31,16 +36,50 @@ const navItems = [
 
 export function Header() {
   const [accountType, setAccountType] = useState("company");
+  const [isScrolled, setIsScrolled] = useState(false);
   const shouldReduceMotion = useReducedMotion();
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setIsScrolled(latest > 18);
+  });
 
   return (
     <motion.header
-      animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-      className="w-full border-b border-black/10 bg-white"
+      animate={
+        shouldReduceMotion
+          ? undefined
+          : {
+              backdropFilter: isScrolled ? "blur(18px)" : "blur(0px)",
+              backgroundColor: isScrolled
+                ? "rgba(255,255,255,0.88)"
+                : "rgba(255,255,255,1)",
+              boxShadow: isScrolled
+                ? "0 18px 45px rgba(6, 2, 18, 0.08)"
+                : "0 0 0 rgba(6, 2, 18, 0)",
+              opacity: 1,
+              y: 0,
+            }
+      }
+      className={cn(
+        "sticky top-0 z-50 w-full border-b transition-colors",
+        isScrolled ? "border-black/5" : "border-black/10",
+      )}
       initial={shouldReduceMotion ? false : { opacity: 0, y: -16 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div className="mx-auto flex w-full max-w-[86rem] flex-col gap-4 px-2 py-4 sm:px-2.5 lg:flex-row lg:items-center lg:justify-between lg:px-3">
+      <motion.div
+        animate={
+          shouldReduceMotion
+            ? undefined
+            : {
+                paddingBottom: isScrolled ? "0.95rem" : "1.25rem",
+                paddingTop: isScrolled ? "0.95rem" : "1.25rem",
+              }
+        }
+        className="mx-auto flex w-full max-w-[86rem] flex-col gap-4 px-2 sm:px-2.5 lg:flex-row lg:items-center lg:justify-between lg:px-3"
+        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+      >
         <Link
           aria-label="WeWerk home"
           className="inline-flex w-fit items-center"
@@ -67,10 +106,10 @@ export function Header() {
             {navItems.map((item) => (
               <Link
                 className={cn(
-                  "transition-colors hover:text-accent-blue",
+                  "transition-colors text-base text-dark font-medium hover:text-accent-blue",
                   item.isActive
-                    ? "font-medium text-accent-blue"
-                    : "font-normal",
+                    ? "font-semibold text-accent-blue"
+                    : "",
                 )}
                 href={item.href}
                 key={item.label}
@@ -82,14 +121,14 @@ export function Header() {
 
           <div
             aria-hidden="true"
-            className="hidden h-9 w-px bg-black/12 lg:block"
+            className="hidden h-[45px] w-[2px] bg-[#D9D9D9] lg:block"
           />
 
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center gap-6">
             <Modal>
               <ModalTrigger asChild>
                 <Button
-                  className="h-11 min-w-[102px] rounded-xl px-6 shadow-[0_16px_34px_rgba(51,0,201,0.22)]"
+                  className="h-11 min-w-[148px] rounded-xl px-6 shadow-[0_16px_34px_rgba(51,0,201,0.22)]"
                   size={null}
                   type="button"
                   variant="primary"
@@ -114,7 +153,7 @@ export function Header() {
             </Button>
           </div>
         </motion.div>
-      </div>
+      </motion.div>
     </motion.header>
   );
 }
