@@ -12,6 +12,7 @@
   --color-dark-soft: #17191c;
   --color-accent-blue: #3300c9;
   --color-accent-purple: #efe6fd;
+  --color-gray: #7D7D7D;
 }
 
 @theme inline {
@@ -26,6 +27,7 @@
   --color-dark-soft: var(--color-dark-soft);
   --color-accent-blue: var(--color-accent-blue);
   --color-accent-purple: var(--color-accent-purple);
+  --color-gray: var(--color-gray);
   --font-sans: var(--font-raleway);
   --font-mono: var(--font-geist-mono);
 }
