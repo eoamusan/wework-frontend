@@ -5,6 +5,7 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 
 import applicantSignupImage from "@wew/assets/images/applicant-sign-up.jpg";
@@ -13,6 +14,8 @@ import { AuthShowcaseCard } from "@wew/customs/authShowcaseCard";
 import { FormCheckbox } from "@wew/customs/formCheckbox";
 import { FormInput } from "@wew/customs/formInput";
 import { PhoneInputField } from "@wew/customs/phoneInputField";
+import { useSignUpMutation } from "@wew/hooks/services/auth/useSignUpMutation";
+import type { AccountType } from "@wew/lib/auth";
 import {
   type CreateApplicantAccountFormValues,
   createApplicantAccountFormSchema,
@@ -44,6 +47,7 @@ function PasswordAdornment({
 const CreateApplicantAccountPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+  const searchParams = useSearchParams();
 
   const form = useForm<CreateApplicantAccountFormValues>({
     defaultValues: {
@@ -59,8 +63,26 @@ const CreateApplicantAccountPage = () => {
     resolver: zodResolver(createApplicantAccountFormSchema),
   });
 
-  const onSubmit = (values: CreateApplicantAccountFormValues) => {
-    form.reset(values);
+  const redirectTo = searchParams.get("redirectTo") || "";
+  const accountType = (searchParams.get("accountType") ||
+    "applicant") as AccountType;
+  const { isPending, signUpHandler } = useSignUpMutation({
+    accountType,
+    redirectTo,
+  });
+
+  const onSubmit = async (values: CreateApplicantAccountFormValues) => {
+    try {
+      await signUpHandler(values);
+      form.reset(values);
+    } catch (error) {
+      form.setError("root", {
+        message:
+          error instanceof Error
+            ? error.message
+            : "We could not create your account. Please try again.",
+      });
+    }
   };
 
   return (
@@ -81,7 +103,10 @@ const CreateApplicantAccountPage = () => {
             <p className="mt-1 text-sm text-[#6e6e6e]">Join WeWork today</p>
           </div>
 
-          <form className="mt-10 flex flex-col gap-5" onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            className="mt-10 flex flex-col gap-5"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
             <FormInput
               error={form.formState.errors.firstName?.message}
               id="firstName"
@@ -187,19 +212,26 @@ const CreateApplicantAccountPage = () => {
 
             <Button
               className="mt-4 h-14 w-full rounded-[0.7rem] text-base font-medium shadow-none hover:translate-y-0"
+              disabled={isPending}
               size={null}
               type="submit"
               variant="primary"
             >
-              Create Account
+              {isPending ? "Creating account..." : "Create Account"}
             </Button>
+
+            {form.formState.errors.root?.message ? (
+              <p className="text-sm text-[#ff5a5a]">
+                {form.formState.errors.root.message}
+              </p>
+            ) : null}
           </form>
 
           <p className="mt-8 text-center text-sm text-[#636363]">
             Already have an account?
             <Link
               className="ml-1 font-medium text-accent-blue transition hover:text-[#2411a3]"
-              href="/login"
+              href={`/login?accountType=${accountType}${redirectTo ? `&redirectTo=${encodeURIComponent(redirectTo)}` : ""}`}
             >
               Sign in
             </Link>

@@ -53,7 +53,7 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="flex justify-center bg-footer-bg text-white">
+    <footer className="flex justify-center bg-footer-bg font-[family:var(--font-footer)] text-white">
       <div className="mx-auto flex w-full max-w-[86rem] flex-col gap-20 px-2 py-12 text-center sm:px-2.5 md:px-3">
         <div className="grid gap-12 lg:grid-cols-[1.35fr_2fr] lg:items-start justify-between">
           <div className=" flex max-w-[32rem] flex-col space-y-5">
@@ -78,15 +78,15 @@ export function Footer() {
               </p>
             </div>
 
-            <form className="flex w-full max-w-[26rem] items-center gap-2.5">
+            <form className="flex w-full max-w-[26rem] flex-col items-stretch gap-3 md:flex-row md:items-center md:gap-2.5">
               <input
-                className="h-13 flex-1 rounded-[0.95rem] border border-white/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0.04)_100%)] px-4 text-base text-white outline-none placeholder:text-[rgba(255,255,255,0.24)]"
+                className="h-13 min-h-13 w-full shrink-0 flex-1 rounded-[0.95rem] border border-white/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0.04)_100%)] px-4 text-base text-white outline-none placeholder:text-[rgba(255,255,255,0.24)]"
                 placeholder="Email address"
                 type="email"
               />
 
               <Button
-                className="h-13 min-w-[9rem] rounded-[0.95rem] px-7 text-[1.05rem] font-medium shadow-[0_18px_34px_rgba(51,0,201,0.3)]"
+                className="h-10 md:h-13 w-full rounded-[0.95rem] px-7 text-[1.05rem] font-medium shadow-[0_18px_34px_rgba(51,0,201,0.3)] md:min-w-[9rem] md:w-auto"
                 size={null}
                 type="submit"
                 variant="primary"

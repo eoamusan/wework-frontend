@@ -1,12 +1,15 @@
-// import { USER_STORAGE_KEY } from "@/constants";
 import axios, { type AxiosInstance } from "axios";
 
-// const institutionShortName =
-//   localStorage.getItem("INSTITUTION_NAME")?.replace(/"/g, "") ||
-//   import.meta.env.VITE_APP_INSTITUTION_SHORT_NAME;
+import {
+  clearStoredAuthSession,
+  getAccessToken,
+  isBrowser,
+} from "@wew/lib/auth";
 
 export const api: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  baseURL:
+    process.env.NEXT_PUBLIC_API_BASE_URL ||
+    process.env.NEXT_PUBLIC_APP_BASE_URL,
   env: {
     // The FormData class to be used to automatically serialize the payload into a FormData object
     FormData: globalThis?.FormData,
@@ -16,18 +19,14 @@ export const api: AxiosInstance = axios.create({
 // Set up axios request interceptors
 api.interceptors.request.use(
   function (config) {
-    let token = "";
-    // if (typeof (config?.headers as any).authorization === "undefined") {
-    //   const tokenModel = JSON.parse(
-    //     localStorage.getItem(USER_STORAGE_KEY) || "{}",
-    //   );
+    const token =
+      typeof (config?.headers as Record<string, string> | undefined)?.Authorization ===
+      "undefined"
+        ? getAccessToken()
+        : "";
 
-    //   if (tokenModel?.token) {
-    //     token = tokenModel?.token;
-    //   }
-    // }
     config.headers = {
-      // Authorization: `Bearer ${token}`,
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       "Content-Type": "application/json",
       ...config.headers,
     } as any;
@@ -35,7 +34,7 @@ api.interceptors.request.use(
     return config;
   },
   function (error: any) {
-    if (getOnlineStatus() === "offline") {
+    if (isBrowser() && getOnlineStatus() === "offline") {
       error = {
         message:
           "You are currently offline. Kindly turn on your network or try again",
@@ -47,7 +46,7 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(null, function (error) {
   if (error?.response?.status === 401 || error?.response?.status === 403) {
-    console.warn("Unauthorized access - redirecting to login page");
+    clearStoredAuthSession();
   }
 
   return Promise.reject(error);
@@ -57,7 +56,9 @@ function getOnlineStatus() {
   return navigator.onLine ? "online" : "offline";
 }
 
-window.addEventListener("offline", getOnlineStatus);
-window.addEventListener("online", getOnlineStatus);
+if (isBrowser()) {
+  window.addEventListener("offline", getOnlineStatus);
+  window.addEventListener("online", getOnlineStatus);
+}
 
 export default api;

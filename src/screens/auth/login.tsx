@@ -6,12 +6,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import googleIcon from "@wew/assets/icons/google.svg";
 import applicantLoginImage from "@wew/assets/images/applicant-login.jpg";
 import { Button } from "@wew/components/ui/button";
 import { FormInput } from "@wew/customs/formInput";
+import { useSignInMutation } from "@wew/hooks/services/auth/useSignInMutation";
+import type { AccountType } from "@wew/lib/auth";
 import {
   type LoginFormValues,
   loginFormSchema,
@@ -19,6 +22,7 @@ import {
 
 export default function LoginPage() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const searchParams = useSearchParams();
   const form = useForm<LoginFormValues>({
     defaultValues: {
       email: "",
@@ -28,8 +32,26 @@ export default function LoginPage() {
     resolver: zodResolver(loginFormSchema),
   });
 
-  const onSubmit = (values: LoginFormValues) => {
-    form.reset(values);
+  const accountType = (searchParams.get("accountType") ||
+    "applicant") as AccountType;
+  const redirectTo = searchParams.get("redirectTo") || "";
+  const { isPending, signInHandler } = useSignInMutation({
+    accountType,
+    redirectTo,
+  });
+
+  const onSubmit = async (values: LoginFormValues) => {
+    try {
+      await signInHandler(values);
+      form.reset(values);
+    } catch (error) {
+      form.setError("root", {
+        message:
+          error instanceof Error
+            ? error.message
+            : "We could not sign you in. Please try again.",
+      });
+    }
   };
 
   return (
@@ -133,12 +155,19 @@ export default function LoginPage() {
 
             <Button
               className="mt-3 h-14 w-full rounded-[0.7rem] text-base font-medium shadow-none hover:translate-y-0"
+              disabled={isPending}
               size={null}
               type="submit"
               variant="primary"
             >
-              Login
+              {isPending ? "Logging in..." : "Login"}
             </Button>
+
+            {form.formState.errors.root?.message ? (
+              <p className="text-sm text-[#ff5a5a]">
+                {form.formState.errors.root.message}
+              </p>
+            ) : null}
 
             <button
               className="flex h-13 w-full items-center justify-center gap-3 rounded-[0.7rem] border border-[#e7e7e7] bg-white text-sm font-medium text-[#4a4a4a] transition hover:bg-[#fafafa]"
@@ -153,7 +182,7 @@ export default function LoginPage() {
             Not Registered Yet?
             <Link
               className="ml-1 font-medium text-accent-blue transition hover:text-[#2411a3]"
-              href="/create-account"
+              href={`/create-account?accountType=${accountType}${redirectTo ? `&redirectTo=${encodeURIComponent(redirectTo)}` : ""}`}
             >
               Create an account
             </Link>

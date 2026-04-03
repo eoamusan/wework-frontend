@@ -22,8 +22,8 @@ export function FormInput({
   ...props
 }: FormInputProps) {
   return (
-    <label className={cn("space-y-2.5", wrapperClassName)}>
-      <span className={cn("text-base text-[#666]", labelClassName)}>{label}</span>
+    <label className={cn("flex flex-col gap-2", wrapperClassName)}>
+      <span className={cn("text-base text-secondary", labelClassName)}>{label}</span>
 
       <div className="relative">
         <Input

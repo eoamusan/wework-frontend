@@ -25,7 +25,7 @@ const buttonVariants = cva(
         primary:
           "bg-[linear-gradient(90deg,#5f30ff_0%,#3300c9_100%)] text-white shadow-[0_20px_40px_rgba(51,0,201,0.26)] hover:-translate-y-0.5 hover:shadow-[0_24px_44px_rgba(51,0,201,0.32)]",
         success:
-          "border border-[#3e641f] bg-white text-[#3e641f] shadow-[0_12px_28px_rgba(62,100,31,0.12)] hover:bg-[#f8fff3]",
+          "border border-[#254C00] bg-white text-[#254C00] shadow-[0_12px_28px_rgba(62,100,31,0.12)] hover:bg-[#f8fff3]",
       },
     },
   },

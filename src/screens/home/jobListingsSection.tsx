@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
+import Link from "next/link";
 
 import briefcaseIcon from "@wew/assets/icons/briefcase.svg";
 import clockIcon from "@wew/assets/icons/clock.svg";
@@ -19,24 +20,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@wew/components/ui/select";
+import { jobs } from "@wew/lib/jobs";
 
 const filters = {
   companies: ["Tech Flow", "Ondea", "TalentGrid"],
   jobTypes: ["Full Time", "Part Time", "Contract"],
   locations: ["Lagos, Nigeria", "Abuja, Nigeria", "Remote"],
 } as const;
-
-const jobs = Array.from({ length: 6 }, (_, index) => ({
-  company: "Tech Flow",
-  department: "Engineering",
-  id: `senior-frontend-engineer-${index + 1}`,
-  location: "Lagos, Nigeria",
-  postedAt: "Posted Jan16, 2026",
-  summary:
-    "We are looking for an experienced Frontend Engineer to lead our core product team. You will be responsible for architecting and building scalable UI components...",
-  title: "Senior Frontend Engineer",
-  type: "Full Time",
-}));
 
 export function JobListingsSection() {
   const [currentPage, setCurrentPage] = useState(2);
@@ -175,12 +165,12 @@ export function JobListingsSection() {
               </p>
 
               <Button
+                asChild
                 className="mt-6 h-11 w-full rounded-xl px-6 text-sm shadow-none hover:translate-y-0"
                 size={null}
-                type="button"
                 variant="outline"
               >
-                View Details
+                <Link href={`/jobs/${job.id}`}>View Details</Link>
               </Button>
             </motion.article>
           ))}

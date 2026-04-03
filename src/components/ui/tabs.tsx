@@ -30,7 +30,7 @@ function TabsTrigger({
   return (
     <TabsPrimitive.Trigger
       className={cn(
-        "relative pb-4 text-sm font-medium text-secondary/70 outline-none transition focus-visible:ring-2 focus-visible:ring-accent-blue/20 data-[state=active]:text-accent-blue data-[state=active]:after:absolute data-[state=active]:after:right-0 data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:h-0.5 data-[state=active]:after:rounded-full data-[state=active]:after:bg-accent-blue",
+        "relative pb-4 text-sm font-bold text-gray outline-none transition focus-visible:ring-2 focus-visible:ring-accent-blue/20 data-[state=active]:text-accent-blue data-[state=active]:after:absolute data-[state=active]:after:right-0 data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:h-0.5 data-[state=active]:after:rounded-full data-[state=active]:after:bg-accent-blue",
         className,
       )}
       data-slot="tabs-trigger"

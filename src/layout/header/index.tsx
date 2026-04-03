@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import { ChevronDown, LogOut } from "lucide-react";
 import {
   motion,
   useMotionValueEvent,
@@ -10,6 +11,7 @@ import {
 } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 import weWorkLogo from "@wew/assets/icons/we-work.png";
 import { Button } from "@wew/components/ui/button";
@@ -17,32 +19,78 @@ import {
   Modal,
   ModalTrigger,
 } from "@wew/components/ui/modal";
+import { useAuth } from "@wew/hooks/useAuth";
+import {
+  getUserDisplayName,
+  getUserInitials,
+} from "@wew/lib/auth";
 import { cn } from "@wew/lib/utils";
 
 import SelectAccountTypeModalContent from "./modal/selectAccountType";
 
-const navItems = [
-  {
-    href: "#",
-    isActive: true,
-    label: "Home",
-  },
-  {
-    href: "#",
-    isActive: false,
-    label: "Browse Candidates",
-  },
+const guestNavItems = [
+  { href: "/", label: "Home" },
+  { href: "#", label: "Browse Candidates" },
+] as const;
+
+const authenticatedNavItems = [
+  { href: "/", label: "Home" },
+  { href: "#", label: "My Applications" },
+  { href: "/profile", label: "My Profile" },
 ] as const;
 
 export function Header() {
   const [accountType, setAccountType] = useState("company");
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const accountMenuRef = useRef<HTMLDivElement | null>(null);
   const shouldReduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
+  const { isAuthenticated, logout, session } = useAuth();
+  const displayName = getUserDisplayName(session?.user);
+  const initials = getUserInitials(session?.user);
+  const navItems = isAuthenticated ? authenticatedNavItems : guestNavItems;
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setIsScrolled(latest > 18);
   });
+
+  useEffect(() => {
+    if (!isAccountMenuOpen) {
+      return;
+    }
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (
+        accountMenuRef.current &&
+        !accountMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsAccountMenuOpen(false);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsAccountMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isAccountMenuOpen]);
+
+  const handleLogout = () => {
+    setIsAccountMenuOpen(false);
+    logout();
+    router.push("/");
+  };
 
   return (
     <motion.header
@@ -107,7 +155,7 @@ export function Header() {
               <Link
                 className={cn(
                   "transition-colors text-base text-dark font-medium hover:text-accent-blue",
-                  item.isActive
+                  pathname === item.href
                     ? "font-semibold text-accent-blue"
                     : "",
                 )}
@@ -124,34 +172,88 @@ export function Header() {
             className="hidden h-[45px] w-[2px] bg-[#D9D9D9] lg:block"
           />
 
-          <div className="flex flex-wrap items-center gap-6">
-            <Modal>
-              <ModalTrigger asChild>
-                <Button
-                  className="h-11 min-w-[148px] rounded-xl px-6 shadow-[0_16px_34px_rgba(51,0,201,0.22)]"
-                  size={null}
+          {isAuthenticated ? (
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="relative" ref={accountMenuRef}>
+                <button
+                  aria-expanded={isAccountMenuOpen}
+                  aria-haspopup="menu"
+                  className="flex items-center gap-4 rounded-2xl border border-transparent px-2 py-1.5 transition hover:border-[#ece6ff] hover:bg-[#faf8ff]"
+                  onClick={() => setIsAccountMenuOpen((value) => !value)}
                   type="button"
-                  variant="primary"
                 >
-                  Get started
-                </Button>
-              </ModalTrigger>
+                  {session?.user?.avatarUrl ? (
+                    <img
+                      alt={displayName}
+                      className="h-12 w-12 rounded-full object-cover"
+                      src={session.user.avatarUrl}
+                    />
+                  ) : (
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#f1ebff] text-sm font-semibold text-accent-blue">
+                      {initials}
+                    </div>
+                  )}
 
-              <SelectAccountTypeModalContent
-                accountType={accountType}
-                setAccountType={setAccountType}
-              />
-            </Modal>
+                  <span className="text-lg font-medium text-dark">
+                    {displayName}
+                  </span>
 
-            <Button
-              asChild
-              className="h-11 min-w-[112px] rounded-xl border-accent-blue/70 px-6 hover:bg-accent-purple/30"
-              size={null}
-              variant="outline"
-            >
-              <Link href="/login">Login</Link>
-            </Button>
-          </div>
+                  <ChevronDown
+                    className={cn(
+                      "size-5 text-secondary transition-transform",
+                      isAccountMenuOpen ? "rotate-180" : "",
+                    )}
+                  />
+                </button>
+
+                {isAccountMenuOpen ? (
+                  <div
+                    className="absolute top-[calc(100%+0.9rem)] right-0 min-w-[190px] rounded-[1rem] border border-[#eceaf5] bg-white p-2 shadow-[0_20px_50px_rgba(7,10,29,0.12)]"
+                    role="menu"
+                  >
+                    <button
+                      className="flex w-full items-center gap-3 rounded-[0.85rem] px-4 py-3 text-left text-sm font-medium text-[#ff4d58] transition hover:bg-[#fff7f8]"
+                      onClick={handleLogout}
+                      role="menuitem"
+                      type="button"
+                    >
+                      <LogOut className="size-4" />
+                      Logout
+                    </button>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-wrap items-center gap-6">
+              <Modal>
+                <ModalTrigger asChild>
+                  <Button
+                    className="h-11 min-w-[148px] rounded-xl px-6 shadow-[0_16px_34px_rgba(51,0,201,0.22)]"
+                    size={null}
+                    type="button"
+                    variant="primary"
+                  >
+                    Get started
+                  </Button>
+                </ModalTrigger>
+
+                <SelectAccountTypeModalContent
+                  accountType={accountType}
+                  setAccountType={setAccountType}
+                />
+              </Modal>
+
+              <Button
+                asChild
+                className="h-11 min-w-[112px] rounded-xl border-accent-blue/70 px-6 hover:bg-accent-purple/30"
+                size={null}
+                variant="outline"
+              >
+                <Link href="/login">Login</Link>
+              </Button>
+            </div>
+          )}
         </motion.div>
       </motion.div>
     </motion.header>
