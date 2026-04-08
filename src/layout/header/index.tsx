@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
-import { ChevronDown, LogOut } from "lucide-react";
 import {
   motion,
   useMotionValueEvent,
@@ -11,7 +10,7 @@ import {
 } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import weWorkLogo from "@wew/assets/icons/we-work.png";
 import { Button } from "@wew/components/ui/button";
@@ -20,12 +19,9 @@ import {
   ModalTrigger,
 } from "@wew/components/ui/modal";
 import { useAuth } from "@wew/hooks/useAuth";
-import {
-  getUserDisplayName,
-  getUserInitials,
-} from "@wew/lib/auth";
 import { cn } from "@wew/lib/utils";
 
+import { AuthenticatedAccountMenu } from "./authenticatedAccountMenu";
 import SelectAccountTypeModalContent from "./modal/selectAccountType";
 
 const guestNavItems = [
@@ -39,58 +35,29 @@ const authenticatedNavItems = [
   { href: "/profile", label: "My Profile" },
 ] as const;
 
+const companyAuthenticatedNavItems = [
+  { href: "/", label: "Home" },
+  { href: "/browse-candidates", label: "Browse Candidates" },
+  { href: "#", label: "Post a Job" },
+] as const;
+
 export function Header() {
   const [accountType, setAccountType] = useState("company");
-  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
-  const accountMenuRef = useRef<HTMLDivElement | null>(null);
   const shouldReduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
-  const { isAuthenticated, logout, session } = useAuth();
-  const displayName = getUserDisplayName(session?.user);
-  const initials = getUserInitials(session?.user);
-  const navItems = isAuthenticated ? authenticatedNavItems : guestNavItems;
+  const { isAuthenticated, session } = useAuth();
+  const isCompanyAccount = session?.accountType === "company";
+  const navItems = isAuthenticated
+    ? isCompanyAccount
+      ? companyAuthenticatedNavItems
+      : authenticatedNavItems
+    : guestNavItems;
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setIsScrolled(latest > 18);
   });
-
-  useEffect(() => {
-    if (!isAccountMenuOpen) {
-      return;
-    }
-
-    const handlePointerDown = (event: MouseEvent) => {
-      if (
-        accountMenuRef.current &&
-        !accountMenuRef.current.contains(event.target as Node)
-      ) {
-        setIsAccountMenuOpen(false);
-      }
-    };
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsAccountMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handlePointerDown);
-    document.addEventListener("keydown", handleEscape);
-
-    return () => {
-      document.removeEventListener("mousedown", handlePointerDown);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [isAccountMenuOpen]);
-
-  const handleLogout = () => {
-    setIsAccountMenuOpen(false);
-    logout();
-    router.push("/");
-  };
 
   return (
     <motion.header
@@ -173,57 +140,7 @@ export function Header() {
           />
 
           {isAuthenticated ? (
-            <div className="flex flex-wrap items-center gap-4">
-              <div className="relative" ref={accountMenuRef}>
-                <button
-                  aria-expanded={isAccountMenuOpen}
-                  aria-haspopup="menu"
-                  className="flex items-center gap-4 rounded-2xl border border-transparent py-1.5 transition hover:border-[#ece6ff] hover:bg-[#faf8ff]"
-                  onClick={() => setIsAccountMenuOpen((value) => !value)}
-                  type="button"
-                >
-                  {session?.user?.avatarUrl ? (
-                    <img
-                      alt={displayName}
-                      className="h-12 w-12 rounded-full object-cover"
-                      src={session.user.avatarUrl}
-                    />
-                  ) : (
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#f1ebff] text-sm font-semibold text-accent-blue">
-                      {initials}
-                    </div>
-                  )}
-
-                  <span className="text-lg font-medium text-dark">
-                    {displayName}
-                  </span>
-
-                  <ChevronDown
-                    className={cn(
-                      "size-5 text-secondary transition-transform",
-                      isAccountMenuOpen ? "rotate-180" : "",
-                    )}
-                  />
-                </button>
-
-                {isAccountMenuOpen ? (
-                  <div
-                    className="absolute top-[calc(100%+0.9rem)] right-0 min-w-[190px] rounded-[1rem] border border-[#eceaf5] bg-white p-2 shadow-[0_20px_50px_rgba(7,10,29,0.12)]"
-                    role="menu"
-                  >
-                    <button
-                      className="flex w-full items-center gap-3 rounded-[0.85rem] px-4 py-3 text-left text-sm font-medium text-[#ff4d58] transition hover:bg-[#fff7f8]"
-                      onClick={handleLogout}
-                      role="menuitem"
-                      type="button"
-                    >
-                      <LogOut className="size-4" />
-                      Logout
-                    </button>
-                  </div>
-                ) : null}
-              </div>
-            </div>
+            <AuthenticatedAccountMenu />
           ) : (
             <div className="flex flex-wrap items-center gap-6">
               <Modal>

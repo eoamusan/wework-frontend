@@ -23,8 +23,7 @@ const SelectAccountTypeModalContent: FC<SelectAccountTypeProps> = ({
   accountType,
   setAccountType,
 }) => {
-  const continueHref =
-    accountType === "applicant" ? "/create-account" : "#";
+  const continueHref = `/create-account?accountType=${accountType}`;
 
   return (
     <ModalContent

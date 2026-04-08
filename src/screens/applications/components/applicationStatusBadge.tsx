@@ -20,7 +20,7 @@ export function ApplicationStatusBadge({
   return (
     <span
       className={cn(
-        "inline-flex min-w-[94px] items-center justify-center rounded-full px-4 py-2 text-xs font-medium",
+        "inline-flex w-[125px] justify-self-start items-center justify-center rounded-full py-2 text-xs font-medium",
         statusStyles[status],
       )}
     >

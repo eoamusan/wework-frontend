@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 
 import googleIcon from "@wew/assets/icons/google.svg";
 import applicantLoginImage from "@wew/assets/images/applicant-login.jpg";
+import companyLoginImage from "@wew/assets/images/company-sign-in.jpg";
 import { Button } from "@wew/components/ui/button";
 import { FormInput } from "@wew/customs/formInput";
 import { useSignInMutation } from "@wew/hooks/services/auth/useSignInMutation";
@@ -35,6 +36,24 @@ export default function LoginPage() {
   const accountType = (searchParams.get("accountType") ||
     "applicant") as AccountType;
   const redirectTo = searchParams.get("redirectTo") || "";
+  const loginContent =
+    accountType === "company"
+      ? {
+          alt: "Company team reviewing candidates together",
+          imageClassName: "object-cover object-[center_90%]",
+          description:
+            "Log in to manage openings, review applicants, and grow your team.",
+          image: companyLoginImage,
+          title: "Hire Better, Faster.",
+        }
+      : {
+          alt: "Smiling applicant using a laptop",
+          imageClassName: "object-cover object-center",
+          description:
+            "Log in to discover new jobs and move closer to your next role.",
+          image: applicantLoginImage,
+          title: "Your Next Opportunity Is Waiting.",
+        };
   const { isPending, signInHandler } = useSignInMutation({
     accountType,
     redirectTo,
@@ -60,12 +79,12 @@ export default function LoginPage() {
         <div className="relative overflow-hidden rounded-[1.35rem] border border-black/6 bg-[#f3eadf] shadow-[0_18px_45px_rgba(6,2,18,0.08)]">
           <div className="relative aspect-[1/0.98] min-h-[420px] w-full">
             <Image
-              alt="Smiling applicant using a laptop"
-              className="object-cover"
+              alt={loginContent.alt}
+              className={loginContent.imageClassName}
               fill
               priority
               sizes="(max-width: 1024px) 100vw, 54vw"
-              src={applicantLoginImage}
+              src={loginContent.image}
             />
 
             <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,rgba(7,4,18,0)_0%,rgba(7,4,18,0.28)_42%,rgba(7,4,18,0.82)_100%)] px-6 pb-7 pt-20 text-center text-white sm:px-9 sm:pb-9">
@@ -76,10 +95,10 @@ export default function LoginPage() {
               </div>
 
               <h1 className="text-2xl font-semibold tracking-[-0.04em] sm:text-[2.15rem]">
-                Your Next Opportunity Is Waiting.
+                {loginContent.title}
               </h1>
               <p className="mt-2 text-base text-white sm:text-lg">
-                Log in to discover new jobs and move closer to your next role.
+                {loginContent.description}
               </p>
             </div>
           </div>

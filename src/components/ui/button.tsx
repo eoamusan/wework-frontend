@@ -7,7 +7,7 @@ import { Loader } from "@wew/components/ui/loader";
 import { cn } from "@wew/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 rounded-[1.35rem] text-base font-medium transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-blue/30",
+  "inline-flex shrink-0 items-center justify-center gap-2 rounded-[1.35rem] text-base cursor-pointer font-medium transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-blue/30",
   {
     defaultVariants: {
       size: "default",

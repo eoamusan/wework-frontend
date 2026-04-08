@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import Header from "@wew/components/header";
 import { Button } from "@wew/components/ui/button";
 import {
   Tabs,
@@ -153,14 +154,7 @@ export default function ProfileScreen() {
     <main className="bg-main-bg">
       <section className="mx-auto w-full max-w-[86rem] px-5 py-10 sm:px-8 lg:px-10 lg:pt-12 lg:pb-24">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <h1 className="text-3xl font-semibold tracking-[-0.06em] text-dark-soft sm:text-5xl">
-              My Profile
-            </h1>
-            <p className="mt-5 text-xl leading-7 text-secondary/80">
-              Manage your public profile, portfolio, and visibility.
-            </p>
-          </div>
+          <Header title="My Profile" description="Manage your public profile, portfolio, and visibility." />
 
           <Button
             className="h-13 rounded-[0.8rem] min-w-full md:min-w-[183px] px-8 text-base shadow-none hover:translate-y-0"

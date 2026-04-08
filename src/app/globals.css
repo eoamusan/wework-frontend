@@ -14,6 +14,7 @@
   --color-accent-purple: #efe6fd;
   --color-gray: #7D7D7D;
   --color-gray-soft: #D3D3D3;
+  --color-danger: #DC3545;
 }
 
 @theme inline {
@@ -30,6 +31,7 @@
   --color-accent-purple: var(--color-accent-purple);
   --color-gray: var(--color-gray);
   --color-gray-soft: var(--color-gray-soft);
+  --color-danger: var(--color-danger);
   --font-sans: var(--font-nunito);
   --font-footer: var(--font-raleway);
   --font-mono: "Consolas", "SFMono-Regular", "Courier New", monospace;
@@ -39,4 +41,49 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+}
+
+* {
+  scrollbar-color: var(--color-accent-blue) #eceaf5;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #eceaf5;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--color-accent-blue);
+  border: 2px solid #eceaf5;
+  border-radius: 9999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #2a00a4;
+}
+
+.app-accent-scrollbar {
+  scrollbar-color: var(--color-accent-blue) #eceaf5;
+}
+
+.app-accent-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.app-accent-scrollbar::-webkit-scrollbar-track {
+  background: #eceaf5;
+}
+
+.app-accent-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-accent-blue);
+  border: 2px solid #eceaf5;
+  border-radius: 9999px;
+}
+
+.app-accent-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #2a00a4;
 }

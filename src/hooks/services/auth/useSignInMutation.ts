@@ -26,6 +26,7 @@ type SignInResponse = {
     _id?: string;
     id?: string;
     accountType?: AccountType;
+    companyName?: string;
     email?: string;
     firstName?: string;
     lastName?: string;
@@ -34,6 +35,10 @@ type SignInResponse = {
       emailAddress?: string;
       name?: string;
       profilePicture?: string;
+    };
+    companyProfile?: {
+      companyName?: string;
+      logo?: string;
     };
   };
 };
@@ -57,14 +62,17 @@ export function useSignInMutation({
       const account = response.data.account;
       const accountId = account?.id || account?._id || "";
       const profile = account?.applicantProfile;
+      const companyProfile = account?.companyProfile;
       const session = normalizeAuthSession({
         accessToken: response.data.accessToken,
         accountId: profile?.accountId || accountId,
         accountType: account?.accountType || payload.accountType,
-        avatarUrl: profile?.profilePicture,
+        avatarUrl: profile?.profilePicture || companyProfile?.logo,
         email: profile?.emailAddress || account?.email,
         firstName: account?.firstName,
         fullName:
+          companyProfile?.companyName ||
+          account?.companyName ||
           profile?.name ||
           [account?.firstName, account?.lastName].filter(Boolean).join(" "),
         id: accountId,
@@ -89,7 +97,8 @@ export function useSignInMutation({
     });
 
     clearStoredRedirectPath();
-    router.replace(redirectTo || getStoredRedirectPath() || "/");
+    const fallbackRoute = accountType === "company" ? "/browse-candidates" : "/";
+    router.replace(redirectTo || getStoredRedirectPath() || fallbackRoute);
   };
 
   return {
