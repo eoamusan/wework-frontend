@@ -35,7 +35,7 @@ const guestNavItems = [
 
 const authenticatedNavItems = [
   { href: "/", label: "Home" },
-  { href: "#", label: "My Applications" },
+  { href: "/applications", label: "My Applications" },
   { href: "/profile", label: "My Profile" },
 ] as const;
 
@@ -178,7 +178,7 @@ export function Header() {
                 <button
                   aria-expanded={isAccountMenuOpen}
                   aria-haspopup="menu"
-                  className="flex items-center gap-4 rounded-2xl border border-transparent px-2 py-1.5 transition hover:border-[#ece6ff] hover:bg-[#faf8ff]"
+                  className="flex items-center gap-4 rounded-2xl border border-transparent py-1.5 transition hover:border-[#ece6ff] hover:bg-[#faf8ff]"
                   onClick={() => setIsAccountMenuOpen((value) => !value)}
                   type="button"
                 >

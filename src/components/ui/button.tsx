@@ -3,6 +3,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { type VariantProps, cva } from "class-variance-authority";
 
+import { Loader } from "@wew/components/ui/loader";
 import { cn } from "@wew/lib/utils";
 
 const buttonVariants = cva(
@@ -34,22 +35,44 @@ const buttonVariants = cva(
 type ButtonProps = React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
+    isLoading?: boolean;
+    loadingText?: string;
   };
 
 function Button({
   asChild = false,
   className,
+  isLoading = false,
+  loadingText,
   size,
   variant,
+  children,
+  disabled,
   ...props
 }: ButtonProps) {
-  const Comp = asChild ? Slot : "button";
+  if (asChild) {
+    return (
+      <Slot
+        aria-busy={isLoading || undefined}
+        aria-disabled={disabled || isLoading || undefined}
+        className={cn(buttonVariants({ className, size, variant }))}
+        {...props}
+      >
+        {children}
+      </Slot>
+    );
+  }
 
   return (
-    <Comp
+    <button
+      aria-busy={isLoading || undefined}
       className={cn(buttonVariants({ className, size, variant }))}
+      disabled={disabled || isLoading}
       {...props}
-    />
+    >
+      {isLoading ? <Loader label={loadingText || "Loading"} /> : null}
+      {isLoading && loadingText ? loadingText : children}
+    </button>
   );
 }
 

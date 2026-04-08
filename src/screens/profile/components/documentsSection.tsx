@@ -24,6 +24,7 @@ type DocumentsSectionProps = {
   formId: string;
   isEditing: boolean;
   onSaved: () => void;
+  onSubmittingChange: (isSubmitting: boolean) => void;
   profile?: ProfileData;
 };
 
@@ -48,6 +49,7 @@ export function DocumentsSection({
   formId,
   isEditing,
   onSaved,
+  onSubmittingChange,
   profile,
 }: DocumentsSectionProps) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -67,6 +69,14 @@ export function DocumentsSection({
   useEffect(() => {
     form.reset(getDefaultValues(profile));
   }, [form, profile]);
+
+  useEffect(() => {
+    onSubmittingChange(form.formState.isSubmitting);
+
+    return () => {
+      onSubmittingChange(false);
+    };
+  }, [form.formState.isSubmitting, onSubmittingChange]);
 
   const onSubmit = async (values: DocumentsFormValues) => {
     try {
@@ -126,7 +136,10 @@ export function DocumentsSection({
   };
 
   const clearDocument = () => {
-    form.setValue("resumeName", "", { shouldDirty: true, shouldValidate: true });
+    form.setValue("resumeName", "", {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
     form.setValue("resumeSize", 0, { shouldDirty: true, shouldValidate: true });
     form.setValue("resumeUrl", "", { shouldDirty: true, shouldValidate: true });
   };
@@ -136,13 +149,17 @@ export function DocumentsSection({
       <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
         <div className="space-y-3">
           <div>
-            <h3 className="text-base font-semibold text-dark-soft">Upload Resume/CV</h3>
+            <h3 className="text-base font-semibold text-dark-soft">
+              Upload Resume/CV
+            </h3>
           </div>
 
           {isEditing && !hasDocument ? (
             <UploadDropzoneButton
               description="Upload PDF, DOC, or DOCX resume"
-              icon={<Image alt="upload" height={48} src={uploadIcon} width={48} />}
+              icon={
+                <Image alt="upload" height={48} src={uploadIcon} width={48} />
+              }
               onClick={() => fileInputRef.current?.click()}
               title="Click or drag file to this area to upload"
             />

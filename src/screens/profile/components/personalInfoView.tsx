@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-
 import briefCaseIcon from "@wew/assets/icons/briefcase.svg";
 import locationIcon from "@wew/assets/icons/locator.svg";
 import mailIcon from "@wew/assets/icons/mail.svg";
@@ -10,25 +8,7 @@ import userIcon from "@wew/assets/icons/user.svg";
 import type { ProfileData } from "@wew/hooks/services/profile/useGetProfileQuery";
 import type { AuthSession } from "@wew/lib/auth";
 
-function DetailItem({
-  icon,
-  label,
-  value,
-}: {
-  icon: string;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="space-y-5">
-      <p className="text-sm font-medium text-secondary">{label}</p>
-      <div className="flex items-start gap-3 text-secondary">
-        <Image src={icon} alt={label} width={24} />
-        <span className="text-sm leading-7">{value || "Not added yet"}</span>
-      </div>
-    </div>
-  );
-}
+import { ProfileDetailsGrid } from "./profileDetailsGrid";
 
 type PersonalInfoViewProps = {
   profile?: ProfileData;
@@ -61,33 +41,35 @@ export function PersonalInfoView({
       </div>
 
       <div className="space-y-8">
-        <div className="grid gap-6 sm:grid-cols-2">
-          <DetailItem
-            icon={userIcon}
-            label="Name"
-            value={profile?.name || fullName}
-          />
-          <DetailItem
-            icon={phoneIcon}
-            label="Phone"
-            value={profile?.phone || ""}
-          />
-          <DetailItem
-            icon={mailIcon}
-            label="Email Address"
-            value={profile?.emailAddress || session?.user?.email || ""}
-          />
-          <DetailItem
-            icon={locationIcon}
-            label="Location"
-            value={profile?.location || ""}
-          />
-          <DetailItem
-            icon={briefCaseIcon}
-            label="Job Title"
-            value={profile?.jobTitle || ""}
-          />
-        </div>
+        <ProfileDetailsGrid
+          items={[
+            {
+              icon: userIcon,
+              label: "Name",
+              value: profile?.name || fullName,
+            },
+            {
+              icon: phoneIcon,
+              label: "Phone",
+              value: profile?.phone || "",
+            },
+            {
+              icon: mailIcon,
+              label: "Email Address",
+              value: profile?.emailAddress || session?.user?.email || "",
+            },
+            {
+              icon: locationIcon,
+              label: "Location",
+              value: profile?.location || "",
+            },
+            {
+              icon: briefCaseIcon,
+              label: "Job Title",
+              value: profile?.jobTitle || "",
+            },
+          ]}
+        />
 
         <div className="space-y-2">
           <p className="text-sm font-medium text-secondary">Bio</p>

@@ -16,6 +16,7 @@ import {
 
 type SuccessModalProps = {
   actionLabel?: string;
+  closeAlign?: "center" | "right";
   description: string;
   onAction?: () => void;
   onOpenChange: (open: boolean) => void;
@@ -25,6 +26,7 @@ type SuccessModalProps = {
 
 export function SuccessModal({
   actionLabel = "Done",
+  closeAlign = "center",
   description,
   onAction,
   onOpenChange,
@@ -43,12 +45,18 @@ export function SuccessModal({
         showCloseButton={false}
       >
         <div className="relative px-6 pt-7 pb-8 sm:px-8">
-          <ModalClose className="absolute top-5 left-1/2 -translate-x-1/2 rounded-full p-1 text-secondary/75 transition hover:bg-[#f5f2ff] hover:text-dark-soft">
+          <ModalClose
+            className={
+              closeAlign === "right"
+                ? "absolute top-5 right-6 rounded-full p-1 text-secondary/75 transition hover:bg-[#f5f2ff] hover:text-dark-soft"
+                : "absolute top-5 left-1/2 -translate-x-1/2 rounded-full p-1 text-secondary/75 transition hover:bg-[#f5f2ff] hover:text-dark-soft"
+            }
+          >
             <X className="size-4" />
             <span className="sr-only">Close</span>
           </ModalClose>
 
-          <div className="mx-auto flex w-full max-w-[21rem] flex-col items-center">
+          <div className="mx-auto flex w-full max-w-[25rem] flex-col items-center">
             <Image
               alt="Success"
               className="mt-6 h-auto w-[6.75rem]"

@@ -21,6 +21,7 @@ type PersonalInfoSectionProps = {
   formId: string;
   isEditing: boolean;
   onSaved: () => void;
+  onSubmittingChange: (isSubmitting: boolean) => void;
   profile?: ProfileData;
   session: AuthSession | null;
 };
@@ -43,6 +44,7 @@ export function PersonalInfoSection({
   formId,
   isEditing,
   onSaved,
+  onSubmittingChange,
   profile,
   session,
 }: PersonalInfoSectionProps) {
@@ -59,6 +61,14 @@ export function PersonalInfoSection({
   useEffect(() => {
     form.reset(getDefaultValues(profile));
   }, [form, profile]);
+
+  useEffect(() => {
+    onSubmittingChange(form.formState.isSubmitting);
+
+    return () => {
+      onSubmittingChange(false);
+    };
+  }, [form.formState.isSubmitting, onSubmittingChange]);
 
   const onSubmit = async (values: PersonalInfoFormValues) => {
     try {

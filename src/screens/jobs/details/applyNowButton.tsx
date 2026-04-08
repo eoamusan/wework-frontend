@@ -12,11 +12,12 @@ export function ApplyNowButton({ redirectPath }: { redirectPath: string }) {
 
   const handleApply = () => {
     if (isAuthenticated) {
+      router.push(`${redirectPath}/apply`);
       return;
     }
 
-    setStoredRedirectPath(redirectPath);
-    router.push(`/login?redirectTo=${encodeURIComponent(redirectPath)}`);
+    setStoredRedirectPath(`${redirectPath}/apply`);
+    router.push(`/login?redirectTo=${encodeURIComponent(`${redirectPath}/apply`)}`);
   };
 
   return (
