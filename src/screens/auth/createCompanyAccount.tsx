@@ -14,7 +14,7 @@ import { AuthShowcaseCard } from "@wew/customs/authShowcaseCard";
 import { FormCheckbox } from "@wew/customs/formCheckbox";
 import { FormInput } from "@wew/customs/formInput";
 import { PhoneInputField } from "@wew/customs/phoneInputField";
-import { useSignUpMutation } from "@wew/hooks/services/auth/useSignUpMutation";
+import { useCompanySignUpMutation } from "@wew/hooks/services/auth/useCompanySignUpMutation";
 import type { AccountType } from "@wew/lib/auth";
 import {
   type CreateCompanyAccountFormValues,
@@ -64,8 +64,7 @@ export default function CreateCompanyAccountPage() {
 
   const redirectTo = searchParams.get("redirectTo") || "";
   const accountType = (searchParams.get("accountType") || "company") as AccountType;
-  const { isPending, signUpHandler } = useSignUpMutation({
-    accountType,
+  const { isPending, signUpHandler } = useCompanySignUpMutation({
     redirectTo,
   });
 

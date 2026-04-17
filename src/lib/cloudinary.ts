@@ -58,6 +58,14 @@ function normalizeTags(tags?: string[] | string) {
   return Array.isArray(tags) ? tags.join(",") : tags;
 }
 
+export function getCloudinaryResourceTypeForFile(file: File): CloudinaryResourceType {
+  if (file.type === "application/pdf") {
+    return "image";
+  }
+
+  return "raw";
+}
+
 export async function uploadToCloudinary(
   file: File,
   options: UploadToCloudinaryOptions = {},

@@ -10,8 +10,6 @@ import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import googleIcon from "@wew/assets/icons/google.svg";
-import applicantLoginImage from "@wew/assets/images/applicant-login.jpg";
-import companyLoginImage from "@wew/assets/images/company-sign-in.jpg";
 import { Button } from "@wew/components/ui/button";
 import { FormInput } from "@wew/customs/formInput";
 import { useSignInMutation } from "@wew/hooks/services/auth/useSignInMutation";
@@ -20,6 +18,8 @@ import {
   type LoginFormValues,
   loginFormSchema,
 } from "@wew/lib/schemas/login-form";
+
+import { getAuthVisualContent } from "./authVisuals";
 
 export default function LoginPage() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -36,24 +36,7 @@ export default function LoginPage() {
   const accountType = (searchParams.get("accountType") ||
     "applicant") as AccountType;
   const redirectTo = searchParams.get("redirectTo") || "";
-  const loginContent =
-    accountType === "company"
-      ? {
-          alt: "Company team reviewing candidates together",
-          imageClassName: "object-cover object-[center_90%]",
-          description:
-            "Log in to manage openings, review applicants, and grow your team.",
-          image: companyLoginImage,
-          title: "Hire Better, Faster.",
-        }
-      : {
-          alt: "Smiling applicant using a laptop",
-          imageClassName: "object-cover object-center",
-          description:
-            "Log in to discover new jobs and move closer to your next role.",
-          image: applicantLoginImage,
-          title: "Your Next Opportunity Is Waiting.",
-        };
+  const loginContent = getAuthVisualContent(accountType);
   const { isPending, signInHandler } = useSignInMutation({
     accountType,
     redirectTo,
@@ -165,7 +148,7 @@ export default function LoginPage() {
 
                 <Link
                   className="font-medium text-[#ff5a5a] transition hover:text-[#ff3d3d]"
-                  href="#"
+                  href={`/forgot-password?accountType=${accountType}${redirectTo ? `&redirectTo=${encodeURIComponent(redirectTo)}` : ""}`}
                 >
                   Forgot Password?
                 </Link>

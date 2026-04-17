@@ -6,11 +6,18 @@ export const applicationSteps: ApplicationStepId[] = [
   "personal",
   "experience",
   "resume",
+  "cover-letter",
   "preview",
 ];
 
 export function getApplicationDefaultValues(): JobApplicationFormValues {
   return {
+    coverLetter: {
+      content: "",
+      fileName: "",
+      fileSize: 0,
+      fileUrl: "",
+    },
     documents: {
       resumeName: "",
       resumeSize: 0,
@@ -67,6 +74,13 @@ export function getStepFields(step: ApplicationStepId) {
         "documents.resumeUrl",
         "documents.resumeName",
         "documents.resumeSize",
+      ] as const;
+    case "cover-letter":
+      return [
+        "coverLetter.content",
+        "coverLetter.fileName",
+        "coverLetter.fileSize",
+        "coverLetter.fileUrl",
       ] as const;
     case "preview":
     default:

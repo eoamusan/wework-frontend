@@ -3,6 +3,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
+import { useMutationToast } from "@wew/hooks/useMutationToast";
 import {
   type AuthSession,
   setStoredAuthSession,
@@ -38,6 +39,7 @@ export function useUpdatePersonalInfoMutation({
   session,
 }: UseUpdatePersonalInfoMutationParams) {
   const queryClient = useQueryClient();
+  const { notifyError, notifySuccess } = useMutationToast();
   const mutation = useMutation({
     mutationFn: (payload: UpdatePersonalInfoPayload) =>
       updateData<UpdatePersonalInfoPayload, UpdatePersonalInfoResponse>(
@@ -49,10 +51,18 @@ export function useUpdatePersonalInfoMutation({
   const updatePersonalInfoHandler = async (
     values: PersonalInfoFormValues,
   ) => {
-    await mutation.mutateAsync({
-      ...values,
-      name: `${values.firstName} ${values.lastName}`.trim(),
-    });
+    try {
+      await mutation.mutateAsync({
+        ...values,
+        name: `${values.firstName} ${values.lastName}`.trim(),
+      });
+    } catch (error) {
+      notifyError(error, {
+        errorMessage: "We could not update your profile right now.",
+        errorTitle: "Profile update failed",
+      });
+      throw error;
+    }
 
     if (session) {
       const currentAccountId =
@@ -75,6 +85,10 @@ export function useUpdatePersonalInfoMutation({
     }
 
     await queryClient.invalidateQueries({ queryKey: ["profile", accountId] });
+    notifySuccess({
+      successMessage: "Your personal information has been updated.",
+      successTitle: "Profile updated",
+    });
     await onSuccess?.();
   };
 

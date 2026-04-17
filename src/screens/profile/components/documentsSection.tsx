@@ -13,7 +13,10 @@ import uploadIcon from "@wew/assets/icons/upload.svg";
 import { UploadDropzoneButton } from "@wew/customs/uploadDropzoneButton";
 import type { ProfileData } from "@wew/hooks/services/profile/useGetProfileQuery";
 import { useUpdateDocumentsMutation } from "@wew/hooks/services/profile/useUpdateDocumentsMutation";
-import { uploadToCloudinary } from "@wew/lib/cloudinary";
+import {
+  getCloudinaryResourceTypeForFile,
+  uploadToCloudinary,
+} from "@wew/lib/cloudinary";
 import {
   type DocumentsFormValues,
   documentsFormSchema,
@@ -98,7 +101,7 @@ export function DocumentsSection({
     try {
       const result = await uploadToCloudinary(file, {
         folder: "profile/resume",
-        resourceType: "raw",
+        resourceType: getCloudinaryResourceTypeForFile(file),
         tags: ["resume"],
       });
 

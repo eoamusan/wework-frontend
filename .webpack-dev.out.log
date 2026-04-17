@@ -1,0 +1,9 @@
+yarn run v1.22.22
+$ C:\Users\user\we-work\node_modules\.bin\next dev --webpack -p 3010
+▲ Next.js 16.2.1 (webpack)
+- Local:         http://localhost:3010
+- Network:       http://10.10.13.86:3010
+- Environments: .env
+✓ Ready in 34.8s
+[?25h
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.

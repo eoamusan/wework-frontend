@@ -125,7 +125,7 @@ export function Calendar({
         )}
       >
         <button
-          className="flex size-9 items-center justify-center rounded-xl border border-[#ece6ff] text-secondary transition hover:bg-[#f7f4ff]"
+          className="flex size-9 items-center cursor-pointer justify-center rounded-xl border border-[#ece6ff] text-secondary transition hover:bg-[#f7f4ff]"
           onClick={() => updateMonth(addMonths(currentMonth, -1))}
           type="button"
         >
@@ -143,7 +143,7 @@ export function Calendar({
               onValueChange={handleMonthSelect}
               value={currentMonth.getMonth().toString()}
             >
-              <SelectTrigger className="h-10 min-w-[7rem] rounded-xl border-[#ece6ff] px-3 text-sm shadow-none">
+              <SelectTrigger className="h-10 min-w-[7rem] cursor-pointer rounded-xl border-[#ece6ff] px-3 text-sm shadow-none">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -159,7 +159,7 @@ export function Calendar({
               onValueChange={handleYearSelect}
               value={currentMonth.getFullYear().toString()}
             >
-              <SelectTrigger className="h-10 min-w-[6rem] rounded-xl border-[#ece6ff] px-3 text-sm shadow-none">
+              <SelectTrigger className="h-10 min-w-[6rem] cursor-pointer rounded-xl border-[#ece6ff] px-3 text-sm shadow-none">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -174,7 +174,7 @@ export function Calendar({
         ) : (
           <div
             className={cn(
-              "flex items-center gap-2 text-sm font-semibold text-dark-soft",
+              "flex items-center gap-2 text-sm font-semibold cursor-pointer text-dark-soft",
               classNames?.monthCaption,
             )}
           >
@@ -186,7 +186,7 @@ export function Calendar({
         )}
 
         <button
-          className="flex size-9 items-center justify-center rounded-xl border border-[#ece6ff] text-secondary transition hover:bg-[#f7f4ff]"
+          className="flex size-9 items-center justify-center cursor-pointer rounded-xl border border-[#ece6ff] text-secondary transition hover:bg-[#f7f4ff]"
           onClick={() => updateMonth(addMonths(currentMonth, 1))}
           type="button"
         >
@@ -235,7 +235,7 @@ export function Calendar({
                   return (
                     <CalendarDayButton
                       className={cn(
-                        "flex aspect-square items-center justify-center rounded-xl text-sm text-dark-soft transition",
+                        "flex aspect-square items-center cursor-pointer justify-center rounded-xl text-sm text-dark-soft transition",
                         isOutside ? "text-secondary/45" : "hover:bg-[#f7f4ff]",
                         isToday ? "border border-[#ddd1ff]" : "",
                         isSelected
@@ -248,7 +248,7 @@ export function Calendar({
                         isOutside ? classNames?.outside : "",
                         isToday ? classNames?.today : "",
                         isSelected ? classNames?.selected : "",
-                        isDisabled ? classNames?.disabled : "",
+                        isDisabled ? classNames?.disabled :  "",
                       )}
                       disabled={isDisabled}
                       key={date.toISOString()}

@@ -8,6 +8,7 @@ export type ApplicationStepId =
   | "personal"
   | "experience"
   | "resume"
+  | "cover-letter"
   | "preview";
 
 const steps: { description: string; label: string; value: ApplicationStepId }[] = [
@@ -25,6 +26,11 @@ const steps: { description: string; label: string; value: ApplicationStepId }[] 
     description: "Upload your Resume/CV",
     label: "Resume/CV",
     value: "resume",
+  },
+  {
+    description: "Upload or write your cover letter",
+    label: "Cover letter",
+    value: "cover-letter",
   },
   {
     description: "Review summary",

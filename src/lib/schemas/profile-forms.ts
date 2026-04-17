@@ -28,9 +28,40 @@ export const jobExperienceItemSchema = z
     description: z.string().trim().min(10, "Add a short description"),
     currentlyWorking: z.boolean(),
   })
-  .refine((value) => value.currentlyWorking || Boolean(value.endDate), {
-    message: "Select an end date or mark this role as current",
-    path: ["endDate"],
+  .superRefine((value, context) => {
+    if (!value.currentlyWorking && !value.endDate) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Select an end date or mark this role as current",
+        path: ["endDate"],
+      });
+    }
+
+    if (!value.startDate || !value.endDate) {
+      return;
+    }
+
+    const startDate = new Date(`${value.startDate}T00:00:00`);
+    const endDate = new Date(`${value.endDate}T00:00:00`);
+
+    if (
+      Number.isNaN(startDate.getTime()) ||
+      Number.isNaN(endDate.getTime()) ||
+      startDate <= endDate
+    ) {
+      return;
+    }
+
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Start date cannot be after end date",
+      path: ["startDate"],
+    });
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "End date cannot be before start date",
+      path: ["endDate"],
+    });
   });
 
 export const jobExperienceFormSchema = z.object({

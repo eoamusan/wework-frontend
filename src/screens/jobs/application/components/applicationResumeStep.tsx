@@ -9,7 +9,10 @@ import fileIcon from "@wew/assets/icons/file.svg";
 import trashIcon from "@wew/assets/icons/trash.svg";
 import uploadIcon from "@wew/assets/icons/upload.svg";
 import { UploadDropzoneButton } from "@wew/customs/uploadDropzoneButton";
-import { uploadToCloudinary } from "@wew/lib/cloudinary";
+import {
+  getCloudinaryResourceTypeForFile,
+  uploadToCloudinary,
+} from "@wew/lib/cloudinary";
 import type { JobApplicationFormValues } from "@wew/lib/schemas/job-application-form";
 
 import type { UseFormReturn } from "react-hook-form";
@@ -44,7 +47,7 @@ export function ApplicationResumeStep({
     try {
       const result = await uploadToCloudinary(file, {
         folder: "job-application/resume",
-        resourceType: "raw",
+        resourceType: getCloudinaryResourceTypeForFile(file),
         tags: ["job-application-resume"],
       });
 

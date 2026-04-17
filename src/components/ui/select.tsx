@@ -51,7 +51,7 @@ function SelectContent({
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
         className={cn(
-          "z-50 min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-2xl border border-[#ebe6ff] bg-white p-2 shadow-[0_32px_80px_rgba(6,2,18,0.18)]",
+          "z-50 max-h-80 min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-2xl border border-[#ebe6ff] bg-white p-2 shadow-[0_32px_80px_rgba(6,2,18,0.18)]",
           className,
         )}
         data-slot="select-content"
@@ -61,7 +61,7 @@ function SelectContent({
         <SelectPrimitive.ScrollUpButton className="flex items-center justify-center py-1 text-secondary/60">
           <ChevronUp className="size-4" />
         </SelectPrimitive.ScrollUpButton>
-        <SelectPrimitive.Viewport className="p-1">
+        <SelectPrimitive.Viewport className="max-h-72 overflow-y-auto p-1">
           {children}
         </SelectPrimitive.Viewport>
         <SelectPrimitive.ScrollDownButton className="flex items-center justify-center py-1 text-secondary/60">

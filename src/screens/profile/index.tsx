@@ -43,49 +43,6 @@ export default function ProfileScreen() {
   const profileData = isProfileNotFound ? profilePreviewData : profile;
   const isPreviewMode = isProfileNotFound;
 
-  // if (!isAuthenticated) {
-  //   return (
-  //     <main className="bg-main-bg">
-  //       <section className="mx-auto flex min-h-[60vh] w-full max-w-[86rem] items-center justify-center px-5 py-16 sm:px-8 lg:px-10">
-  //         <div className="max-w-[32rem] rounded-[1.8rem] border border-[#ebe7f6] bg-white p-8 text-center shadow-[0_18px_48px_rgba(7,10,29,0.06)]">
-  //           <h1 className="text-4xl font-semibold tracking-[-0.05em] text-dark-soft">
-  //             My Profile
-  //           </h1>
-  //           <p className="mt-4 text-base leading-7 text-secondary/80">
-  //             Sign in to manage your public profile, experience, and resume.
-  //           </p>
-  //           <Button
-  //             asChild
-  //             className="mt-8 h-13 rounded-[0.85rem] px-7 text-base shadow-none hover:translate-y-0"
-  //             size={null}
-  //           >
-  //             <Link href="/login">Go to Login</Link>
-  //           </Button>
-  //         </div>
-  //       </section>
-  //     </main>
-  //   );
-  // }
-
-  // if (!accountId) {
-  //   return (
-  //     <main className="bg-main-bg">
-  //       <section className="mx-auto flex min-h-[60vh] w-full max-w-[86rem] items-center justify-center px-5 py-16 sm:px-8 lg:px-10">
-  //         <div className="max-w-[34rem] rounded-[1.8rem] border border-[#ebe7f6] bg-white p-8 shadow-[0_18px_48px_rgba(7,10,29,0.06)]">
-  //           <h1 className="text-4xl font-semibold tracking-[-0.05em] text-dark-soft">
-  //             My Profile
-  //           </h1>
-  //           <p className="mt-4 text-base leading-7 text-secondary/80">
-  //             We could not find your account identifier in the current session,
-  //             so the profile endpoints cannot be loaded yet. Please sign in
-  //             again once the API includes `accountId` in the auth response.
-  //           </p>
-  //         </div>
-  //       </section>
-  //     </main>
-  //   );
-  // }
-
   const handleTabChange = (value: string) => {
     setActiveTab(value as ProfileTab);
     setIsEditing(false);
@@ -154,7 +111,10 @@ export default function ProfileScreen() {
     <main className="bg-main-bg">
       <section className="mx-auto w-full max-w-[86rem] px-5 py-10 sm:px-8 lg:px-10 lg:pt-12 lg:pb-24">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-          <Header title="My Profile" description="Manage your public profile, portfolio, and visibility." />
+          <Header
+            title="My Profile"
+            description="Manage your public profile, portfolio, and visibility."
+          />
 
           <Button
             className="h-13 rounded-[0.8rem] min-w-full md:min-w-[183px] px-8 text-base shadow-none hover:translate-y-0"
@@ -176,21 +136,23 @@ export default function ProfileScreen() {
           onValueChange={handleTabChange}
           value={activeTab}
         >
-          {/* {isPreviewMode ? (
-            <div className="mb-6 rounded-[1rem] border border-[#ece7ff] bg-[#faf8ff] px-4 py-3 text-sm text-accent-blue">
-              Profile endpoint returned `404`, so preview data is being shown to
-              help you inspect the UI. Saving is disabled in this mode.
-            </div>
-          ) : null} */}
-
           <TabsList className="gap-8 border-b-0">
-            <TabsTrigger className="pb-3 text-sm" value="personal">
+            <TabsTrigger
+              className="pb-3 text-sm cursor-pointer"
+              value="personal"
+            >
               Personal Information
             </TabsTrigger>
-            <TabsTrigger className="pb-3 text-sm" value="experience">
+            <TabsTrigger
+              className="pb-3 text-sm cursor-pointer"
+              value="experience"
+            >
               Job Experience &amp; Links
             </TabsTrigger>
-            <TabsTrigger className="pb-3 text-sm" value="documents">
+            <TabsTrigger
+              className="pb-3 text-sm cursor-pointer"
+              value="documents"
+            >
               Documents
             </TabsTrigger>
           </TabsList>

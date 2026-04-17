@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+
 import { useQuery } from "@tanstack/react-query";
 
 import { getData } from "@wew/lib/requests";
@@ -120,9 +122,10 @@ export function useGetProfileQuery({
       getData<ProfileResponse>(`wework/auth/profile/${accountId}`),
     enabled: Boolean(accountId),
   });
+  const profile = useMemo(() => mapProfileResponse(query.data?.data), [query.data?.data]);
 
   return {
     ...query,
-    profile: mapProfileResponse(query.data?.data),
+    profile,
   };
 }

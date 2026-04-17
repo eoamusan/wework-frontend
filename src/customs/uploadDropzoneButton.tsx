@@ -22,7 +22,7 @@ export function UploadDropzoneButton({
   return (
     <button
       className={cn(
-        "flex min-h-[264px] w-full flex-col items-center justify-center rounded-[1rem] border border-dashed border-[#ddd7ef] bg-[#00000005] px-6 text-center transition hover:bg-[#faf9ff]",
+        "flex min-h-[264px] w-full flex-col cursor-pointer items-center justify-center rounded-[1rem] border border-dashed border-[#ddd7ef] bg-[#00000005] px-6 text-center transition hover:bg-[#faf9ff]",
         className,
       )}
       onClick={onClick}

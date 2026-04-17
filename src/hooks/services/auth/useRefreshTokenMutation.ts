@@ -2,6 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query";
 
+import { useMutationToast } from "@wew/hooks/useMutationToast";
 import {
   getStoredAuthSession,
   normalizeAuthSession,
@@ -22,6 +23,7 @@ type RefreshTokenResponse = {
 };
 
 export function useRefreshTokenMutation() {
+  const { notifyError, notifySuccess } = useMutationToast();
   const mutation = useMutation({
     mutationFn: async (payload: RefreshTokenPayload) => {
       const response = await postData<RefreshTokenPayload, RefreshTokenResponse>(
@@ -46,7 +48,22 @@ export function useRefreshTokenMutation() {
   });
 
   const refreshTokenHandler = async (refreshToken: string) => {
-    return mutation.mutateAsync({ refreshToken });
+    try {
+      const response = await mutation.mutateAsync({ refreshToken });
+
+      notifySuccess({
+        successMessage: "Your session has been refreshed.",
+        successTitle: "Session updated",
+      });
+
+      return response;
+    } catch (error) {
+      notifyError(error, {
+        errorMessage: "We could not refresh your session.",
+        errorTitle: "Session refresh failed",
+      });
+      throw error;
+    }
   };
 
   return {

@@ -24,6 +24,12 @@ export function JobExperienceFormCard({
 }: JobExperienceFormCardProps) {
   const itemError = form.formState.errors.experiences?.[index];
   const isCurrentRole = form.watch(`experiences.${index}.currentlyWorking`);
+  const startDateFieldName = `experiences.${index}.startDate` as const;
+  const endDateFieldName = `experiences.${index}.endDate` as const;
+
+  const validateDateRange = async () => {
+    await form.trigger([startDateFieldName, endDateFieldName]);
+  };
 
   return (
     <div className="rounded-[1rem] border border-[#e8e4f3] bg-white p-5">
@@ -59,7 +65,10 @@ export function JobExperienceFormCard({
               <DatePicker
                 error={itemError?.startDate?.message}
                 label="Start Date"
-                onChange={field.onChange}
+                onChange={(value) => {
+                  field.onChange(value);
+                  void validateDateRange();
+                }}
                 value={field.value}
               />
             )}
@@ -67,13 +76,16 @@ export function JobExperienceFormCard({
 
           <Controller
             control={form.control}
-            name={`experiences.${index}.endDate`}
+            name={endDateFieldName}
             render={({ field }) => (
               <DatePicker
                 disabled={isCurrentRole}
                 error={itemError?.endDate?.message}
                 label="End Date"
-                onChange={field.onChange}
+                onChange={(value) => {
+                  field.onChange(value);
+                  void validateDateRange();
+                }}
                 value={field.value}
               />
             )}
@@ -91,8 +103,9 @@ export function JobExperienceFormCard({
               onChange={(checked) => {
                 field.onChange(checked);
                 if (checked) {
-                  form.setValue(`experiences.${index}.endDate`, "");
+                  form.setValue(endDateFieldName, "");
                 }
+                void validateDateRange();
               }}
             >
               I currently work in this role

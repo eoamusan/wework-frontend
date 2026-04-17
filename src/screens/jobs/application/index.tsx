@@ -25,6 +25,7 @@ import {
   getStepFields,
 } from "./application.constants";
 import { ApplicationCard } from "./components/applicationCard";
+import { ApplicationCoverLetterStep } from "./components/applicationCoverLetterStep";
 import { ApplicationFooterActions } from "./components/applicationFooterActions";
 import { ApplicationJobExperienceStep } from "./components/applicationJobExperienceStep";
 import { ApplicationLoginPrompt } from "./components/applicationLoginPrompt";
@@ -213,6 +214,10 @@ export default function JobApplicationScreen({
                     form={form}
                     onResumeUploaded={setUploadedResumeFile}
                   />
+                ) : null}
+
+                {currentStep === "cover-letter" ? (
+                  <ApplicationCoverLetterStep form={form} />
                 ) : null}
 
                 {currentStep === "preview" ? (

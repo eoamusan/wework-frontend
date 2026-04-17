@@ -3,6 +3,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
+import { useMutationToast } from "@wew/hooks/useMutationToast";
 import {
   type AccountType,
   clearStoredRedirectPath,
@@ -53,6 +54,7 @@ export function useSignInMutation({
   redirectTo = "",
 }: UseSignInMutationParams) {
   const router = useRouter();
+  const { notifyError, notifySuccess } = useMutationToast();
   const mutation = useMutation({
     mutationFn: async (payload: SignInPayload) => {
       const response = await postData<SignInPayload, SignInResponse>(
@@ -90,14 +92,26 @@ export function useSignInMutation({
   });
 
   const signInHandler = async (values: LoginFormValues) => {
-    await mutation.mutateAsync({
-      accountType,
-      email: values.email,
-      password: values.password,
-    });
+    try {
+      await mutation.mutateAsync({
+        accountType,
+        email: values.email,
+        password: values.password,
+      });
+    } catch (error) {
+      notifyError(error, {
+        errorMessage: "We could not sign you in. Please try again.",
+        errorTitle: "Sign in failed",
+      });
+      throw error;
+    }
 
     clearStoredRedirectPath();
     const fallbackRoute = accountType === "company" ? "/browse-candidates" : "/";
+    notifySuccess({
+      successMessage: "You have signed in successfully.",
+      successTitle: "Welcome back",
+    });
     router.replace(redirectTo || getStoredRedirectPath() || fallbackRoute);
   };
 

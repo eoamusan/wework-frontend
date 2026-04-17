@@ -7,6 +7,7 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 
+import { ToastProvider } from "@wew/components/ui/toastProvider";
 import { AuthProvider } from "@wew/hooks/useAuth";
 
 export function AppProviders({ children }: { children: ReactNode }) {
@@ -26,7 +27,9 @@ export function AppProviders({ children }: { children: ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>{children}</AuthProvider>
+      <ToastProvider>
+        <AuthProvider>{children}</AuthProvider>
+      </ToastProvider>
     </QueryClientProvider>
   );
 }
